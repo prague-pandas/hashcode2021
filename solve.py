@@ -13,6 +13,8 @@ def load(filename):
     paths = []
     with open(filename) as f:
         D, I, S, V, F = map(int, f.readline().split())
+        in_streets = [[] for i in range(I)]
+        out_streets = [[] for i in range(I)]
         for i in range(S):
             B, E, name, L = f.readline().split()
             B = int(B)
@@ -22,6 +24,8 @@ def load(filename):
             bs.append(B)
             es.append(E)
             ls.append(L)
+            in_streets[E].append(name)
+            out_streets[B].append(name)
         for i in range(V):
             l = f.readline().split()
             P = int(l[0])
@@ -34,6 +38,8 @@ def load(filename):
         'V': V,
         'F': F,
         'streets': streets,
+        'in_streets': in_streets,
+        'out_streets': out_streets,
         'bs': bs,
         'es': es,
         'ls': ls,
@@ -54,6 +60,8 @@ def main():
     for basename in 'abcdef':
         data_set = load(os.path.join('data', f'{basename}.txt'))
         schedule = []
+        for names in data_set.in_streets:
+            schedule.append([(name, 1) for name in names])
         out_dir = 'out'
         os.makedirs(out_dir, exist_ok=True)
         with open(os.path.join(out_dir, f'{basename}.txt'), 'w') as f:
