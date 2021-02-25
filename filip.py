@@ -2,7 +2,6 @@ import collections
 import os
 
 from attributedict.collections import AttributeDict
-from tqdm import tqdm
 
 
 def load(filename):
