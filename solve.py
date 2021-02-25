@@ -41,11 +41,24 @@ def load(filename):
     })
 
 
+def save(schedule, f):
+    f.write(f'{len(schedule)}\n')
+    for i, streets in enumerate(schedule):
+        f.write(f'{i}\n')
+        f.write(f'{len(streets)}\n')
+        for name, t in streets:
+            f.write(f'{name} {t}\n')
+
+
 def main():
     for basename in 'abcdef':
-        print(load(os.path.join('data', f'{basename}.txt')))
-    # Create a simple solution: all interesctions rotate evely
-    # Save the solution
+        data_set = load(os.path.join('data', f'{basename}.txt'))
+        schedule = []
+        out_dir = 'out'
+        os.makedirs(out_dir, exist_ok=True)
+        with open(os.path.join(out_dir, f'{basename}.txt'), 'w') as f:
+            save(schedule, f)
+    # Create a simple solution: all interesctions rotate evenly
     # Evaluate the solution
 
 
