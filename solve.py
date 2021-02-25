@@ -1,8 +1,10 @@
 #!/usr/env/bin python3
 
 import os
+import random
 
 from attributedict.collections import AttributeDict
+from tqdm import tqdm
 
 
 def load(filename):
@@ -56,18 +58,45 @@ def save(schedule, f):
             f.write(f'{name} {t}\n')
 
 
+def score(data_set, schedule):
+    # TODO: Implement
+    return 0
+
+
+def mutate(streets, prob_permute=0.1):
+    if random.random() < prob_permute:
+        streets = random.shuffle(streets)
+    return streets
+
+
+def perturb(schedule):
+    return list(map(mutate, schedule))
+
+
 def main():
+    random.seed(0)
     for basename in 'abcdef':
+        # Load data set
         data_set = load(os.path.join('data', f'{basename}.txt'))
+
+        # Create first schedule: rotate evenly
         schedule = []
         for names in data_set.in_streets:
             schedule.append([(name, 1) for name in names])
+
+        # Hill-climb by random steps
+        prev_s = score(data_set, schedule)
+        for i in tqdm(range(100)):
+            new_schedule = perturb(schedule)
+            s = score(data_set, new_schedule)
+            if s > prev_s:
+                schedule = new_schedule
+
+        # Save solution
         out_dir = 'out'
         os.makedirs(out_dir, exist_ok=True)
         with open(os.path.join(out_dir, f'{basename}.txt'), 'w') as f:
             save(schedule, f)
-    # Create a simple solution: all interesctions rotate evenly
-    # Evaluate the solution
 
 
 if __name__ == '__main__':
