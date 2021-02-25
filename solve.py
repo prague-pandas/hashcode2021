@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 def load(filename):
     streets = {}
+    streets_lens = {}
     bs = []
     es = []
     ls = []
@@ -24,6 +25,7 @@ def load(filename):
             E = int(E)
             L = int(L)
             streets[name] = (B, E, L)
+            streets_lens[name] = L
             bs.append(B)
             es.append(E)
             ls.append(L)
