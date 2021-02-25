@@ -3,6 +3,7 @@
 import os
 import random
 
+import numpy as np
 from attributedict.collections import AttributeDict
 from tqdm import tqdm
 
@@ -63,9 +64,18 @@ def score(data_set, schedule):
     return 0
 
 
-def mutate(streets, prob_permute=0.1):
-    if random.random() < prob_permute:
-        streets = random.shuffle(streets)
+rng = np.random.RandomState(0)
+prob_shuffle = 0.1
+prob_change_time = 0.1
+scale = 1.0
+
+
+def mutate(streets):
+    if rng.rand() < prob_shuffle:
+        rng.shuffle(streets)
+    for i in range(len(streets)):
+        if rng.rand() < prob_change_time:
+            streets[i] = (streets[i][0], int(rng.exponential(scale=scale)) + 1)
     return streets
 
 
@@ -86,7 +96,7 @@ def main():
 
         # Hill-climb by random steps
         prev_s = score(data_set, schedule)
-        for i in tqdm(range(100)):
+        for i in tqdm(range(100), desc=basename):
             new_schedule = perturb(schedule)
             s = score(data_set, new_schedule)
             if s > prev_s:
