@@ -1,5 +1,7 @@
 #!/usr/env/bin python3
 
+import os
+
 from attributedict.collections import AttributeDict
 
 
@@ -41,7 +43,7 @@ def load(filename):
 
 def main():
     for basename in 'abcdef':
-        print(load(f'{basename}.txt'))
+        print(load(os.path.join('data', f'{basename}.txt')))
     # Create a simple solution: all interesctions rotate evely
     # Save the solution
     # Evaluate the solution
