@@ -68,7 +68,7 @@ def get_street_scores(ds):
 def get_s(o):
     if o == 0:
         return 0
-    res = int(o / 1)
+    res = int(o / 10)
     if res == 0:
         res += 1
     return res
